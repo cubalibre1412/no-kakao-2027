@@ -20,7 +20,11 @@ npm install
 npm run dev
 ```
 
-브라우저에서 `http://localhost:3000`을 엽니다. `npm start`도 동일하게 실행됩니다. `PORT` 환경변수 또는 `--port` 인자를 지정할 수 있으며 `0.0.0.0`에서 수신합니다. 정적 웹 호스팅에서는 기존처럼 `dist` 디렉터리를 사용합니다.
+브라우저에서 `http://localhost:3000`을 엽니다. `npm start`도 동일하게 실행됩니다. `PORT` 환경변수 또는 `--port` 인자를 지정할 수 있으며 `0.0.0.0`에서 수신합니다. 정적 웹 호스팅에서는 `index.html`, `app.js`, `style.css`와 `assets` 폴더를 함께 제공합니다.
+
+## 가져오기 파일 누락 수정
+
+AI Studio에서 `dist` 폴더가 누락된 것을 실제 파일 탐색기에서 확인했습니다. 화면·스크립트·스타일은 저장소 루트에, 이미지는 `assets` 폴더에 보관하도록 옮겼습니다.
 
 ## Google AI Studio에서 가져오기
 
@@ -37,13 +41,13 @@ GitHub의 최신 `main`을 가져온 뒤 `npm install` 및 `npm run dev`를 실�
 
 ## 구조
 
-- `dist/index.html`: 화면·입력 UI
-- `dist/style.css`: 반응형 레이아웃
-- `dist/app.js`: Canvas 합성·사진 조절·PNG 저장
-- `dist/assets/campaign-frame.png`: 사용자 확인을 받은 캠페인 고정 프레임 (라이언 제외)
-- `dist/assets/alliance-circle.png`: 원형 프로필 로고, 오른쪽 심벌 배지의 원본
-- `dist/assets/alliance-logo.png`: 정사각형 로고
-- `dist/assets/alliance-wide.png`: 직사각형 로고
+- `index.html`: 화면·입력 UI
+- `style.css`: 반응형 레이아웃
+- `app.js`: Canvas 합성·사진 조절·PNG 저장
+- `assets/campaign-frame.png`: 사용자 확인을 받은 캠페인 고정 프레임 (라이언 제외)
+- `assets/alliance-circle.png`: 원형 프로필 로고, 오른쪽 심벌 배지의 원본
+- `assets/alliance-logo.png`: 정사각형 로고
+- `assets/alliance-wide.png`: 직사각형 로고
 
 큰 팻말형은 글자를 기기 글꼴로 다시 그리지 않고 고정 이미지 프레임을 합성합니다. 오른쪽 원형 배지는 제공된 로고 소스를 별도로 사용합니다. 사진 강조형은 Canvas 텍스트를 사용합니다.
 

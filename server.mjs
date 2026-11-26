@@ -3,7 +3,7 @@ import { stat, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('./dist/', import.meta.url));
+const root = fileURLToPath(new URL('./', import.meta.url));
 const args = process.argv.slice(2);
 const portIndex = args.findIndex(value => value === '--port' || value === '-p');
 const inlinePort = args.find(value => value.startsWith('--port='))?.split('=')[1];
@@ -28,6 +28,7 @@ export const server = http.createServer(async (req, res) => {
     else if (pathname.startsWith('/dist/')) pathname = pathname.slice(5);
     if (pathname.includes('\0') || pathname.includes('\\')) { reply(400, 'Invalid path'); return; }
     if (pathname.endsWith('/')) pathname += 'index.html';
+    if (!['/index.html', '/app.js', '/style.css'].includes(pathname) && !/^\/assets\/[a-z0-9-]+\.png$/.test(pathname)) { reply(404, 'Not found'); return; }
     const filename = path.resolve(root, '.' + pathname);
     if (!filename.startsWith(root)) { reply(403, 'Forbidden'); return; }
     const info = await stat(filename);
@@ -36,7 +37,7 @@ export const server = http.createServer(async (req, res) => {
     res.end(req.method === 'HEAD' ? undefined : await readFile(filename));
   } catch (error) {
     if (res.headersSent) { res.destroy(); return; }
-    reply(error instanceof URIError ? 400 : error.code === 'ENOENT' || error.code === 'ENOTDIR' ? 404 : 500, 'Unable to serve file');
+    reply(error instanceof URIError ? 400 : error.code === 'ENOENT' || error.code === 'ENOTDIR' ? 404 : 500, 'App resource missing. Check that index.html, app.js, style.css and assets/ were imported.');
   }
 });
 server.listen(port, '0.0.0.0', () => console.log(`Kakao profile badge ready on http://0.0.0.0:${port}`));
