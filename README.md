@@ -13,13 +13,27 @@
 
 ## 실행
 
-빌드와 API 키가 필요 없는 HTML/CSS/JavaScript 앱입니다.
+외부 패키지와 API 키가 필요 없는 HTML/CSS/JavaScript 앱입니다. AI Studio와 Cloud Run에서 바로 실행할 수 있도록 Node.js 시작 설정을 포함합니다.
 
 ```bash
-python3 -m http.server 8080 --directory dist
+npm install
+npm run dev
 ```
 
-브라우저에서 `http://localhost:8080`을 엽니다. 정적 웹 호스팅에 배포할 때는 `dist` 디렉터리를 사용합니다.
+브라우저에서 `http://localhost:3000`을 엽니다. `npm start`도 동일하게 실행됩니다. `PORT` 환경변수 또는 `--port` 인자를 지정할 수 있으며 `0.0.0.0`에서 수신합니다. 정적 웹 호스팅에서는 기존처럼 `dist` 디렉터리를 사용합니다.
+
+## Google AI Studio에서 가져오기
+
+GitHub의 최신 `main`을 가져온 뒤 `npm install` 및 `npm run dev`를 실행합니다. 기본 포트는 3000입니다. 이전 버전을 이미 가져왔다면 GitHub 변경사항을 먼저 가져오거나 프로젝트를 새로 가져오세요. 미리보기의 Reload 버튼만으로는 저장소 변경사항이 반영되지 않을 수 있습니다.
+
+`npm run build`는 시작 파일과 이미지 누락 및 JavaScript 구문을 검사합니다. 앱은 이미 정적 파일로 완성되어 별도 컴파일은 필요하지 않습니다. 배포에는 `npm start`를 사용하거나 포함된 `Dockerfile`을 사용합니다. Cloud Run의 `PORT` 환경변수를 지원합니다.
+
+## 시작 문제 확인
+
+- 로그에서 `Kakao profile badge ready on http://0.0.0.0:3000`을 확인합니다.
+- `/healthz`가 `ok`를 반환하는지 확인합니다.
+- `/assets/campaign-frame.png`와 세 로고 경로가 HTTP 200을 반환해야 합니다.
+- 사진 합성·저장은 브라우저 안에서 처리되며 Gemini API 키가 필요하지 않습니다.
 
 ## 구조
 

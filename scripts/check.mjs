@@ -1,0 +1,10 @@
+import { access, readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
+const root = new URL('../', import.meta.url);
+for (const file of ['dist/index.html', 'dist/style.css', 'dist/app.js', 'dist/assets/campaign-frame.png', 'dist/assets/alliance-circle.png', 'dist/assets/alliance-logo.png', 'dist/assets/alliance-wide.png']) await access(new URL(file, root));
+execFileSync(process.execPath, ['--check', fileURLToPath(new URL('dist/app.js', root))]);
+execFileSync(process.execPath, ['--check', fileURLToPath(new URL('server.mjs', root))]);
+const html = await readFile(new URL('dist/index.html', root), 'utf8');
+if (!html.includes('app.js') || !html.includes('style.css')) throw new Error('Missing page resources');
+console.log('Static app and all four image assets are ready. No compilation required.');
