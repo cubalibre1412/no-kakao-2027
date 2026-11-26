@@ -28,11 +28,12 @@ export const server = http.createServer(async (req, res) => {
     else if (pathname.startsWith('/dist/')) pathname = pathname.slice(5);
     if (pathname.includes('\0') || pathname.includes('\\')) { reply(400, 'Invalid path'); return; }
     if (pathname.endsWith('/')) pathname += 'index.html';
-    if (!['/index.html', '/app.js', '/style.css'].includes(pathname) && !/^\/assets\/[a-z0-9-]+\.png$/.test(pathname)) { reply(404, 'Not found'); return; }
+    if (!['/index.html', '/app.js', '/style.css'].includes(pathname) && !/^\/assets\/[a-z0-9-]+\.(?:png|webp)$/.test(pathname)) { reply(404, 'Not found'); return; }
     const filename = path.resolve(root, '.' + pathname);
     if (!filename.startsWith(root)) { reply(403, 'Forbidden'); return; }
     const info = await stat(filename);
     if (!info.isFile()) { reply(404, 'Not found'); return; }
+    if (pathname.startsWith('/assets/')) res.setHeader('Cache-Control', 'public, max-age=3600');
     res.writeHead(200, { 'Content-Type': types[path.extname(filename).toLowerCase()] || 'application/octet-stream', 'Content-Length': info.size });
     res.end(req.method === 'HEAD' ? undefined : await readFile(filename));
   } catch (error) {
